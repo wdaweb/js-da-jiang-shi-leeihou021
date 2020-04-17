@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    body {
+      background-image: url(./pic.png);
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+
+    .point {
+      width: 150px;
+      height: 200px;
+      background-color: bisque;
+      float: right;
+    }
+
+    #game {
+      width: 100%;
+      height: 900px;
+      cursor: url(./手指.png) 10 -20, auto;
+      overflow: hidden;
+      position: relative;
+    }
+
+    #game:active {
+      cursor: url(./點.png) 10 -20, auto;
+    }
+
+    #game>img {
+      position: absolute;
+      height: 150px;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="game">
+    <div class="point">
+      <input type="button" value="開始遊戲" id="btn-start">
+      <p>分數: <span id="text-score">0</span></p>
+      <p>剩餘時間: <span id="text-time">30</span>秒</p>
+    </div>
+  </div>
+
+  <script src="../jquery-3.5.0.min.js"></script>
+  <script>
+    // 分數
+    let score = 0;
+    // 剩餘時間
+    let timeleft = 30;
+    // 遊戲計時器
+    let gametimer = 0;
+    // 殭屍流水號
+    let gugu = 0;
+    const bgm = new Audio
+    const gugudead = new Audio
+    gugudead.src = "./gugudead.mp3"
+    bgm.src = "./bgm.mp3"
+    const rand = (num) => {
+      return Math.round(Math.random() * num)
+    }
+
+    const movegu = (gugu) => {
+      $(`#gu${gugu}`).animate({
+        top: (79) + "%",
+        left: rand(70) + "%"
+      }, 3000, function () {
+        movegu(gugu);
+      })
+    }
+    const movetop = (gugu) => {
+      $(`#gu${gugu}`).animate({
+        top: (51) + "%",
+        left: rand(30) + "%"
+      }, 3000, function () {
+        movetop(gugu);
+      })
+    }
+
+    $("#btn-start").click(function () {
+      // 停用開始按鈕
+      $(this).attr("disabled", true);
+      bgm.play()
+
+      // 重設
+      score = 0;
+      $("#text-score").text(score);
+      timeleft = 30;
+      $("#text-time").text(timeleft);
+
+      // 遊戲倒數
+      gametimer = setInterval(() => {
+        // 倒數
+        timeleft--;
+        $("#text-time").text(timeleft);
+
+        // 時間到
+        if (timeleft == 0) {
+          // 停止計時器
+          clearInterval(gametimer);
+          // 啟用開始按鈕
+          $(this).attr("disabled", false);
+          setTimeout(() => {
+            alert("時間到");
+          }, 100);
+          // 清場
+          $("#game img").remove();
+          bgm.load()
+        }
+        else {
+          // 隨機
+          const num = rand(10);
+          // 如果抽到數字大於 5 ，生一個殭屍
+          if (num > 3) {
+            $("#game").append(`<img src="./gugu2.gif" id="gu${gugu}">`);
+            $(`#gu${gugu}`).css({
+              top: (79) + "%",
+              left: rand(70) + "%"
+            })
+            movegu(gugu);
+            gugu++;
+          }
+          if (gugu > 5) {
+            $("#game").append(`<img src="./gugu2.gif" id="gu${gugu}">`);
+            $(`#gu${gugu}`).css({
+              top: (51) + "%",
+              left: rand(30) + "%"
+            })
+            movetop(gugu);
+            gugu++;
+          }
+        }
+
+      }, 1000)
+    })
+
+    $("#game").on("click", "img", function () {
+      gugudead.load()
+      gugudead.play()
+      $(this).attr("src", "./hat.png");
+      $(this).stop();
+      $(this).css("pointer-events", "none");
+      $(this).fadeOut()
+      score++;
+      $("#text-score").text(score);
+    })
+  </script>
+</body>
+
+</html>
