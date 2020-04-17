@@ -17,6 +17,16 @@
       height: 200px;
       background-color: bisque;
       float: right;
+      text-align: center;
+
+    }
+
+    .start {
+      width: 100px;
+      height: 100px;
+      text-align: center;
+      border-radius: 80px 80px;
+
     }
 
     #game {
@@ -41,7 +51,7 @@
 <body>
   <div id="game">
     <div class="point">
-      <input type="button" value="開始遊戲" id="btn-start">
+      <input type="button" value="開始狩獵菇菇" id="btn-start" class="start">
       <p>分數: <span id="text-score">0</span></p>
       <p>剩餘時間: <span id="text-time">30</span>秒</p>
     </div>
@@ -66,6 +76,7 @@
     }
 
     const movegu = (gugu) => {
+
       $(`#gu${gugu}`).animate({
         top: (79) + "%",
         left: rand(70) + "%"
@@ -77,8 +88,16 @@
       $(`#gu${gugu}`).animate({
         top: (51) + "%",
         left: rand(30) + "%"
-      }, 3000, function () {
+      }, 2000, function () {
         movetop(gugu);
+      })
+    }
+    const moveup = (gugu) => {
+      $(`#gu${gugu}`).animate({
+        top: (18) + "%",
+        left: rand(35) + "%"
+      }, 3000, function () {
+        moveup(gugu);
       })
     }
 
@@ -117,21 +136,36 @@
           const num = rand(10);
           // 如果抽到數字大於 5 ，生一個殭屍
           if (num > 3) {
-            $("#game").append(`<img src="./gugu2.gif" id="gu${gugu}">`);
+            $("#game").append(`<img src="./gugu3.gif" id="gu${gugu}">`);
             $(`#gu${gugu}`).css({
               top: (79) + "%",
               left: rand(70) + "%"
             })
+            // let num2 = rand(5)
+
+            // if (num2 < 3) {
+            //   movetop(gugu);
+            // }
+            // else {}
             movegu(gugu);
             gugu++;
           }
           if (gugu > 5) {
-            $("#game").append(`<img src="./gugu2.gif" id="gu${gugu}">`);
+            $("#game").append(`<img src="./gugu3.gif" id="gu${gugu}">`);
             $(`#gu${gugu}`).css({
               top: (51) + "%",
-              left: rand(30) + "%"
+              left: rand(40) + "%"
             })
             movetop(gugu);
+            gugu++;
+          }
+          if (gugu > 10) {
+            $("#game").append(`<img src="./gugu3.gif" id="gu${gugu}">`);
+            $(`#gu${gugu}`).css({
+              top: (18) + "%",
+              left: rand(35) + "%"
+            })
+            moveup(gugu);
             gugu++;
           }
         }
