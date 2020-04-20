@@ -57,7 +57,7 @@
     </div>
   </div>
 
-  <script src="../jquery-3.5.0.min.js"></script>
+  <script src="./jquery-3.5.0.min.js"></script>
   <script>
     // 分數
     let score = 0;
@@ -67,6 +67,8 @@
     let gametimer = 0;
     // 殭屍流水號
     let gugu = 0;
+    let dgugu = 0;
+
     const bgm = new Audio
     const gugudead = new Audio
     gugudead.src = "./gugudead.mp3"
@@ -84,6 +86,7 @@
         movegu(gugu);
       })
     }
+
     const movetop = (gugu) => {
       $(`#gu${gugu}`).animate({
         top: (51) + "%",
@@ -98,6 +101,34 @@
         left: rand(35) + "%"
       }, 3000, function () {
         moveup(gugu);
+      })
+    }
+    // 殭屍菇菇
+    const movedg = (dgugu) => {
+
+      $(`#dg${dgugu}`).animate({
+        top: (79) + "%",
+        left: rand(70) + "%"
+      }, 3000, function () {
+        movedg(dgugu);
+      })
+    }
+    const moveud = (dgugu) => {
+
+      $(`#dg${dgugu}`).animate({
+        top: (51) + "%",
+        left: rand(30) + "%"
+      }, 4000, function () {
+        moveud(dgugu);
+      })
+    }
+    const movetd = (dgugu) => {
+
+      $(`#dg${dgugu}`).animate({
+        top: (18) + "%",
+        left: rand(35) + "%"
+      }, 5000, function () {
+        movetd(dgugu);
       })
     }
 
@@ -132,26 +163,18 @@
           bgm.load()
         }
         else {
-          // 隨機
           const num = rand(10);
-          // 如果抽到數字大於 5 ，生一個殭屍
-          if (num > 3) {
-            $("#game").append(`<img src="./gugu3.gif" id="gu${gugu}">`);
+          if (num > 4) {
+            $("#game").append(`<img src="./gugu3.gif" class="guu" id="gu${gugu}">`);
             $(`#gu${gugu}`).css({
               top: (79) + "%",
               left: rand(70) + "%"
             })
-            // let num2 = rand(5)
-
-            // if (num2 < 3) {
-            //   movetop(gugu);
-            // }
-            // else {}
             movegu(gugu);
             gugu++;
           }
-          if (gugu > 5) {
-            $("#game").append(`<img src="./gugu3.gif" id="gu${gugu}">`);
+          if (num > 5) {
+            $("#game").append(`<img src="./gugu3.gif" class="guu" id="gu${gugu}">`);
             $(`#gu${gugu}`).css({
               top: (51) + "%",
               left: rand(40) + "%"
@@ -159,8 +182,8 @@
             movetop(gugu);
             gugu++;
           }
-          if (gugu > 10) {
-            $("#game").append(`<img src="./gugu3.gif" id="gu${gugu}">`);
+          if (num > 6) {
+            $("#game").append(`<img src="./gugu3.gif" class="guu" id="gu${gugu}">`);
             $(`#gu${gugu}`).css({
               top: (18) + "%",
               left: rand(35) + "%"
@@ -168,12 +191,42 @@
             moveup(gugu);
             gugu++;
           }
+          // 殭屍菇菇
+          if (num == 5) {
+            $("#game").append(`<img src="./deadgugu3.gif" class="dgu" id="dg${dgugu}">`);
+            $(`#dg${dgugu}`).css({
+              top: (79) + "%",
+              left: rand(70) + "%"
+            })
+            movedg(dgugu);
+
+            dgugu++;
+          }
+          if (num == 3) {
+            $("#game").append(`<img src="./deadgugu3.gif" class="dgu" id="dg${dgugu}">`);
+            $(`#dg${dgugu}`).css({
+              top: (51) + "%",
+              left: rand(40) + "%"
+            })
+            moveud(dgugu);
+            dgugu++;
+          }
+          if (num == 8) {
+            $("#game").append(`<img src="./deadgugu3.gif" class="dgu" id="dg${dgugu}">`);
+            $(`#dg${dgugu}`).css({
+              top: (18) + "%",
+              left: rand(35) + "%"
+            })
+            movetd(dgugu);
+            dgugu++;
+          }
+
         }
 
       }, 1000)
     })
 
-    $("#game").on("click", "img", function () {
+    $("#game").on("click", ".guu", function () {
       gugudead.load()
       gugudead.play()
       $(this).attr("src", "./hat.png");
@@ -183,6 +236,18 @@
       score++;
       $("#text-score").text(score);
     })
+    $("#game").on("click", ".dgu", function () {
+      gugudead.load()
+      gugudead.play()
+      $(this).attr("src", "./dhat.png");
+      $(this).stop();
+      $(this).css("pointer-events", "none");
+      $(this).fadeOut()
+      score--;
+      $("#text-score").text(score);
+    })
+
+
   </script>
 </body>
 
